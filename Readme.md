@@ -78,6 +78,22 @@ Laquelle ?
 
 > Les classes Fields sont les sections des Documents. Chaque Classe est d’un type particulier. Pour la classe TextField, le text est  transformé en tokens et indexé. Une classe pareille à TextField est StringField mais on ne peut pas l’utiliser parce qu’elle n’a pas de tokens, alors il serait impossible de réaliser une requête après.
 
-* Q5.1
+
+#### 4 Reconfiguration de l’indexation
+Voir commits
 
 
+#### 5  Questions ouvertes
+
+* Q5.1: Renseignez vous sur Terrier ou/et Solr ou/et ElasticSearch et essayez de faire le même index.
+Quelles différences identifiez-vous ?
+
+> Terrier, Solr et ElasticSearch sont des logiciels ou systemes qui permettent de faire la recherche et indexation des documents sans besoin de connaître les librairies ou code des tiers. Alors, ils utilisent une metalangage pour configurer les paramètres selon les requêtes ou actions nécessaires.
+
+> Ainsi, par exemple pour le cas de ElasticSearch, pour ajouter les fichiers à l'indexation il faut faire juste: curl -XPUT ‘data’. Par contre, en Lucene il faut bien connaître le structure des classes ou objets fondamentales.
+
+
+* Q5.2: Pour Lucene, où sont les « fichiers d’indexation » mentionnés dans la diapositive 34 du cours ?
+Pourquoi sont-ils nécessaires ?
+
+> Dans le code on a spécifier le fichier ‘indexRI’ pour garder les indexes (qui sont des fichiers binaires). Après Lucene va les lire avec un IndexReader pour calculer le score de pertinence et montrer les résultat aux prochaines requêtes.
