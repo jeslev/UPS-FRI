@@ -75,7 +75,8 @@ public class IndexCollection {
         try {
             CSVParser csvFileParser = CSVFormat.DEFAULT.parse(new FileReader(new File(filename)));
             for (CSVRecord csvRecord : csvFileParser) {
-                indexDoc(csvRecord.get(1));
+                //indexDoc(csvRecord.get(1));
+                indexDoc(csvRecord.get(2)); // Q4.1
             }
         } catch (IOException e) {
             Logger.getLogger(IndexCollection.class.getName()).log(Level.SEVERE, null, e);
