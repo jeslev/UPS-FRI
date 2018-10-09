@@ -38,10 +38,12 @@ public class IndexCollection {
     String titleString;
     String indexPath;
     IndexWriter writer;
+    boolean create;
 
-    public IndexCollection(String filename, String indexPath) {
+    public IndexCollection(String filename, String indexPath, boolean create) {
         this.filename = filename;
         this.indexPath = indexPath;
+        this.create = create;
     }
 
     public void index() throws IOException {
@@ -65,7 +67,7 @@ public class IndexCollection {
         Analyzer analyzer = new StandardAnalyzer();
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
-        boolean create = true;
+        //boolean create = true;
         if (create) {
             iwc.setOpenMode(OpenMode.CREATE);
         } else {

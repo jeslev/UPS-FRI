@@ -26,12 +26,12 @@ public class TPRI1 {
     
     public static void main(String[] args) {
         TPRI1 wfr = new TPRI1();
-        wfr.index();
+        wfr.index(true);
         wfr.query("title:France");
     }
     
-    public void index() {
-        IndexCollection mywikipedia = new IndexCollection(nameFileXML,nameFolderIndex);
+    public void index(boolean create) {
+        IndexCollection mywikipedia = new IndexCollection(nameFileXML,nameFolderIndex, create);
         try {
             mywikipedia.index();
         } catch (Exception ex) {
