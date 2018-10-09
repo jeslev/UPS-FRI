@@ -4,7 +4,7 @@
 
 ### List of TPs
 
-1. TP1 -> [branchTP1]()
-2. TP2 -> [branchTP2]()
+1. TP1 -> [branchTP1](https://github.com/jeslev/UPS-FRI/tree/TP1)
+2. TP2 -> [branchTP2](https://github.com/jeslev/UPS-FRI/tree/TP2)
 3. TP3 -> [branchTP3]()
 4. TP4 -> [branchTP4]()
