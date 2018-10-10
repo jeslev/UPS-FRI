@@ -1,10 +1,5 @@
 package tp1;
 
-/**
-*
-* @author jlovonm
-*/
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,15 +10,24 @@ import org.apache.lucene.index.NumericDocValues;
 import org.apache.lucene.search.CollectionStatistics;
 import org.apache.lucene.search.Explanation;
 import org.apache.lucene.search.TermStatistics;
+
+/**
+*
+* @author jlovonm
+*/
+
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.search.similarities.Similarity.SimScorer;
 import org.apache.lucene.search.similarities.Similarity.SimWeight;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.SmallFloat;
 
-import tp1.TFMax.IDFStats;
+import sun.font.GlyphLayout.LayoutEngineFactory;
+import tp1.TFSum.IDFStats;
 
-public class TFMax extends Similarity {
+
+
+public class TFBM25 extends Similarity {
 	
 	/** Cache of decoded bytes. */
 	static final float[] OLD_NORM_TABLE = new float[256];
@@ -35,14 +39,43 @@ public class TFMax extends Similarity {
 		}
 	
 	
-	public TFMax() {}
+	float k1, b;
 	
+	public TFBM25(float k1, float b) {
+		super();
+		this.k1 = k1;
+		this.b = b;
+	}
+	
+	public TFBM25() {
+		this(1.2f, 0.75f);
+	}
 	
 	protected boolean discountOverlaps = true;
+
+	public void setDiscountOverlaps(boolean v) {
+		discountOverlaps = v;
+	}
 
 	public boolean getDiscountOverlaps() {
 		return discountOverlaps;
 	}
+	
+	  /** Cache of decoded bytes. */
+	  private static final float[] OLD_LENGTH_TABLE = new float[256];
+	  private static final float[] LENGTH_TABLE = new float[256];
+
+	  static {
+	    for (int i = 1; i < 256; i++) {
+	      float f = SmallFloat.byte315ToFloat((byte)i);
+	      OLD_LENGTH_TABLE[i] = 1.0f / (f*f);
+	    }
+	    OLD_LENGTH_TABLE[0] = 1.0f / OLD_LENGTH_TABLE[255]; // otherwise inf
+
+	    for (int i = 0; i < 256; i++) {
+	      LENGTH_TABLE[i] = SmallFloat.byte4ToInt((byte) i);
+	    }
+	  }
 	  
 	/***********************************************************************
 	/***********************************************************************
@@ -54,6 +87,7 @@ public class TFMax extends Similarity {
 	 - computerNorm
 	 - computerWeigthed
 	 - score
+	 - avgFieldLength
 	  
 	 ***********************************************************************
 	 ***********************************************************************/
@@ -62,8 +96,8 @@ public class TFMax extends Similarity {
 		return (float) 1.0;
 	}
 	  
-	public float tf(float freq, float nt_max) {
-		return freq / nt_max;
+	public float tf(float freq, float ndl) {
+		return freq / ( freq + this.k1 *( (1-this.b) + this.b*ndl));
 	}
 	
 	@Override
@@ -71,21 +105,34 @@ public class TFMax extends Similarity {
 		final int numTerms = discountOverlaps ? state.getLength() - state.getNumOverlap() : state.getLength();
 		
 		
-		// Mettre le term n(t_max,d) pendant l'indexation
-		int tf_max_d = state.getMaxTermFrequency();
-		
 	    int indexCreatedVersionMajor = state.getIndexCreatedVersionMajor();
 	    if (indexCreatedVersionMajor >= 7) {
-	    	return SmallFloat.intToByte4(numTerms) *  tf_max_d;
+	    	return SmallFloat.intToByte4(numTerms);
 	    } else {
-	    	return SmallFloat.floatToByte315((float) (1 / ( Math.sqrt(numTerms)*tf_max_d )  ));
+	    	return SmallFloat.floatToByte315((float) (1 / ( Math.sqrt(numTerms) )  ));
 	    }
 	 }
 	  
-	public void setDiscountOverlaps(boolean v) {
-		discountOverlaps = v;
-	}
 	
+	  /** The default implementation computes the average as <code>sumTotalTermFreq / docCount</code> */
+	  protected float avgFieldLength(CollectionStatistics collectionStats) {
+	    final long sumTotalTermFreq;
+	    if (collectionStats.sumTotalTermFreq() == -1) {
+	      // frequencies are omitted (tf=1), its # of postings
+	      if (collectionStats.sumDocFreq() == -1) {
+	        // theoretical case only: remove!
+	        return 1f;
+	      }
+	      sumTotalTermFreq = collectionStats.sumDocFreq();
+	    } else {
+	      sumTotalTermFreq = collectionStats.sumTotalTermFreq();
+	    }
+	    final long docCount = collectionStats.docCount() == -1 ? collectionStats.maxDoc() : collectionStats.docCount();
+	    return (float) (sumTotalTermFreq / (double) docCount);
+	  }
+	  
+	  
+	  
 	/** Implemented as <code>1 / (distance + 1)</code>. */
 	public float sloppyFreq(int distance) {
 		return 1.0f / (distance + 1);
@@ -114,50 +161,54 @@ public class TFMax extends Similarity {
 		return Explanation.match((float) idf, "idf(), sum of:", subs);
 	}
 	  
-	
-	  
+
 	 @Override
 	 public final SimWeight computeWeight(float boost, CollectionStatistics collectionStats, TermStatistics... termStats) {
 		 final Explanation idf = termStats.length == 1?idfExplain(collectionStats, termStats[0]) : idfExplain(collectionStats, termStats);
+		 float avgdl = avgFieldLength(collectionStats);
+		 
 		 float[] normTable = new float[256];
+		 float[] oldnormTable = new float[256];
 		 for (int i = 1; i < 256; ++i) {
 			 int length = SmallFloat.byte4ToInt((byte) i);
 			 //float norm = (float) (1.0 / Math.sqrt(length));
-			float norm = (float) (1.0 * length);
-			 normTable[i] = norm;
+			 float norm = (float) (1.0 * length);
+			 oldnormTable[i] = OLD_LENGTH_TABLE[i] / avgdl;
+			 normTable[i] = LENGTH_TABLE[i] / avgdl;
 		 }
 		 normTable[0] = 1f / normTable[255];
-		 return new IDFStats(collectionStats.field(), boost, idf, normTable);
+		 return new IDFStats(collectionStats.field(), boost, idf, oldnormTable, normTable);
 	 }
 	 
 	 
 	 @Override
 	 public final SimScorer simScorer(SimWeight stats, LeafReaderContext context) throws IOException {
 		 IDFStats idfstats = (IDFStats) stats;
-		 final float[] normTable;
-		 if (context.reader().getMetaData().getCreatedVersionMajor() >= 7) {
-	     // the norms only encode the length, we need a translation table that depends on how lengthNorm is implemented
-			 normTable = idfstats.normTable;
-		 } else {
-			 // the norm is directly encoded in the index
-			 normTable = OLD_NORM_TABLE;
-		}
 		 
-		return new TFIDFSimScorer(idfstats, context.reader().getNormValues(idfstats.field), normTable);
+		 
+		return new TFIDFSimScorer(idfstats, context.reader().getMetaData().getCreatedVersionMajor(), context.reader().getNormValues(idfstats.field) );
 	 }
 	  
 	 private final class TFIDFSimScorer extends SimScorer {
 		 private final IDFStats stats;
 		 private final float weightValue;
 		 private final NumericDocValues norms;
-		 private final float[] normTable;
+		 private final float[] lengthCache;
+		 private final float[] cache;
 		 
 		 
-		 TFIDFSimScorer(IDFStats stats, NumericDocValues norms, float[] normTable) throws IOException {
+		 
+		 TFIDFSimScorer(IDFStats stats, int indexCreatedVersionMajor, NumericDocValues norms) throws IOException {
 			 this.stats = stats;
 		     this.weightValue = stats.queryWeight;
 		     this.norms = norms;
-		     this.normTable = normTable;
+		     if (indexCreatedVersionMajor >= 7) {
+		         lengthCache = LENGTH_TABLE;
+		         cache = stats.normTable;
+		       } else {
+		         lengthCache = OLD_LENGTH_TABLE;
+		         cache = stats.oldnormTable;
+		       }
 		 }
 		    
 		 @Override
@@ -169,9 +220,9 @@ public class TFMax extends Similarity {
 		     } else {
 		    	 float normValue;
 		    	 if (norms.advanceExact(doc)) {
-		    		 normValue = normTable[(int) (norms.longValue() & 0xFF)];
+		    		 normValue = cache[(int) (norms.longValue() & 0xFF)];
 		    	 } else {
-		    		 normValue = 0;
+		    		 normValue = cache[0];
 		    	 }
 		    	 final float raw = tf(freq,normValue) * weightValue;
 		    	 return raw ;  // 
@@ -190,7 +241,7 @@ public class TFMax extends Similarity {
 
 		 @Override
 		 public Explanation explain(int doc, Explanation freq) throws IOException {
-			 return explainScore(doc, freq, stats, norms, normTable);
+			 return null;//explainScore(doc, freq, stats, norms, normTable);
 		 }
 	 }
 	  
@@ -201,15 +252,16 @@ public class TFMax extends Similarity {
 		 private final Explanation idf;
 		 private final float boost;
 		 private final float queryWeight;
-		 final float[] normTable;
+		 final float[] normTable, oldnormTable;
 		    
-		 public IDFStats(String field, float boost, Explanation idf, float[] normTable) {
+		 public IDFStats(String field, float boost, Explanation idf, float[] normTable, float[] oldnormTable) {
 			 // TODO: Validate?
 		     this.field = field;
 		     this.idf = idf;
 		     this.boost = boost;
 		     this.queryWeight = boost * idf.getValue();
 		     this.normTable = normTable;
+		     this.oldnormTable = oldnormTable;
 		 }
 	 }  
 
