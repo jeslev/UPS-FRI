@@ -1,5 +1,11 @@
 package tp1;
 
+/**
+*
+* @author jlovonm
+*/
+
+
 import org.apache.lucene.search.similarities.BM25Similarity;
 
 public class BM11Similarity extends BM25Similarity {

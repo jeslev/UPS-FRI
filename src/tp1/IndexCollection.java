@@ -68,7 +68,7 @@ public class IndexCollection {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         
-        iwc.setSimilarity(new BM11Similarity(1.2f));
+        iwc.setSimilarity(new BM15Similarity(1.2f));
         boolean create = true;
         if (create) {
             iwc.setOpenMode(OpenMode.CREATE);
