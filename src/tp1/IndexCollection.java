@@ -28,6 +28,8 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
+import tp1.BM11Similarity;
+
 /**
  *
  * @author moreno
@@ -65,6 +67,8 @@ public class IndexCollection {
         Analyzer analyzer = new StandardAnalyzer();
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        
+        iwc.setSimilarity(new BM11Similarity(1.2f));
         boolean create = true;
         if (create) {
             iwc.setOpenMode(OpenMode.CREATE);
