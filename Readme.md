@@ -65,6 +65,12 @@ public float score(int doc, float freq) throws IOException {
 - BM15 (b = 0) [classe BM15Similarity](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/BM15Similarity.java)
 
 #### 3 Variations de TF.
+- Total  [classe TFTotal](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/TFTotal.java)
+- Max  [classe TFMax](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/TFMax.java)
+ - Sum  [classe TFSum](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/TFSum.java)
+ - Log  [classe TFLog](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/TFLog.java)
+ - Frac  [classe TFFrac](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/TFFrac.java)
+ - BM25  [classe TFBM25](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/TFBM25.java)
 
 
 #### 4 Variations de IDF.
