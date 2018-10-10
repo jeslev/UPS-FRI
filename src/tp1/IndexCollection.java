@@ -29,6 +29,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import tp1.BM11Similarity;
+import tp1.TFFrac;
 import tp1.TFLog;
 import tp1.TFMax;
 import tp1.TFSum;
@@ -72,7 +73,7 @@ public class IndexCollection {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         
-        iwc.setSimilarity(new TFLog());
+        iwc.setSimilarity(new TFFrac(1.2f));
         boolean create = true;
         if (create) {
             iwc.setOpenMode(OpenMode.CREATE);
