@@ -74,7 +74,11 @@ public float score(int doc, float freq) throws IOException {
 
 
 #### 4 Variations de IDF.
-
+- Total [classe IDFTotal](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/IDFTotal.java)
+- Sum [classe IDFSuml](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/IDFSum.java)
+- Sum, Smooth [classe IDFSmooth](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/IDFSmooth.java)
+- BIR [classe IDFBir](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/IDFBir.java)
+- BIR, Smooth [classe IDFBirSmooth](https://github.com/jeslev/UPS-FRI/blob/TP2/src/tp1/IDFBirSmooth.java)
 
 #### 5 Utilisez plusieurs des méthodes des points précédents avec la requête « the white house ». Identifiez les différences parmi toutes les méthodes que vous avez implémentée. Avec les premiers 5 résultats pouvez vous dire quelle méthode vous semble la plus pertinente ? Pourquoi ?.
 
