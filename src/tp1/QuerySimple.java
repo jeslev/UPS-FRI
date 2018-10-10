@@ -49,7 +49,7 @@ public class QuerySimple {
         IndexReader reader = DirectoryReader.open(index);
         
         IndexSearcher searcher = new IndexSearcher(reader);
-        searcher.setSimilarity(new BM15Similarity(1.2f));
+        searcher.setSimilarity(new TFTotal());
         
         TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
         searcher.search(q, collector);
