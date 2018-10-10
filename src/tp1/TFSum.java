@@ -1,10 +1,5 @@
 package tp1;
 
-/**
-*
-* @author jlovonm
-*/
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +16,14 @@ import org.apache.lucene.search.similarities.Similarity.SimWeight;
 import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.SmallFloat;
 
-import tp1.TFMax.IDFStats;
+import tp1.TFSum.IDFStats;
 
-public class TFMax extends Similarity {
+/**
+*
+* @author jlovonm
+*/
+
+public class TFSum extends Similarity {
 	
 	/** Cache of decoded bytes. */
 	static final float[] OLD_NORM_TABLE = new float[256];
@@ -35,10 +35,13 @@ public class TFMax extends Similarity {
 		}
 	
 	
-	public TFMax() {}
-	
+	public TFSum() {}
 	
 	protected boolean discountOverlaps = true;
+
+	public void setDiscountOverlaps(boolean v) {
+		discountOverlaps = v;
+	}
 
 	public boolean getDiscountOverlaps() {
 		return discountOverlaps;
@@ -71,21 +74,17 @@ public class TFMax extends Similarity {
 		final int numTerms = discountOverlaps ? state.getLength() - state.getNumOverlap() : state.getLength();
 		
 		
-		// Mettre le term n(t_max,d) pendant l'indexation
-		int tf_max_d = state.getMaxTermFrequency();
+		// NumTerms est n(d).
 		
 	    int indexCreatedVersionMajor = state.getIndexCreatedVersionMajor();
 	    if (indexCreatedVersionMajor >= 7) {
-	    	return SmallFloat.intToByte4(numTerms) *  tf_max_d;
+	    	return SmallFloat.intToByte4(numTerms)*numTerms;
 	    } else {
-	    	return SmallFloat.floatToByte315((float) (1 / ( Math.sqrt(numTerms)*tf_max_d )  ));
+	    	return SmallFloat.floatToByte315((float) (1 / ( Math.sqrt(numTerms)*numTerms )  ));
 	    }
 	 }
 	  
-	public void setDiscountOverlaps(boolean v) {
-		discountOverlaps = v;
-	}
-	
+	  
 	/** Implemented as <code>1 / (distance + 1)</code>. */
 	public float sloppyFreq(int distance) {
 		return 1.0f / (distance + 1);
@@ -114,8 +113,7 @@ public class TFMax extends Similarity {
 		return Explanation.match((float) idf, "idf(), sum of:", subs);
 	}
 	  
-	
-	  
+
 	 @Override
 	 public final SimWeight computeWeight(float boost, CollectionStatistics collectionStats, TermStatistics... termStats) {
 		 final Explanation idf = termStats.length == 1?idfExplain(collectionStats, termStats[0]) : idfExplain(collectionStats, termStats);
@@ -123,7 +121,7 @@ public class TFMax extends Similarity {
 		 for (int i = 1; i < 256; ++i) {
 			 int length = SmallFloat.byte4ToInt((byte) i);
 			 //float norm = (float) (1.0 / Math.sqrt(length));
-			float norm = (float) (1.0 / length);
+			 float norm = (float) (1.0 / length);
 			 normTable[i] = norm;
 		 }
 		 normTable[0] = 1f / normTable[255];
@@ -142,6 +140,7 @@ public class TFMax extends Similarity {
 			 // the norm is directly encoded in the index
 			 normTable = OLD_NORM_TABLE;
 		}
+		 
 		 
 		return new TFIDFSimScorer(idfstats, context.reader().getNormValues(idfstats.field), normTable);
 	 }
@@ -172,7 +171,7 @@ public class TFMax extends Similarity {
 		    	 } else {
 		    		 normValue = 0;
 		    	 }
-		    	 return raw * normValue;  // 
+		    	 return raw * normValue;  // normalize for field
 		     }
 		 }
 		    
