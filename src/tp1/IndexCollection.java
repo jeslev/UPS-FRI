@@ -29,6 +29,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import tp1.BM11Similarity;
+import tp1.IDFBir;
+import tp1.IDFBirSmooth;
 import tp1.IDFSmooth;
 import tp1.IDFSum;
 import tp1.IDFTotal;
@@ -77,7 +79,7 @@ public class IndexCollection {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         
-        iwc.setSimilarity(new IDFSmooth());
+        iwc.setSimilarity(new IDFBirSmooth());
         
         boolean create = true;
         if (create) {
