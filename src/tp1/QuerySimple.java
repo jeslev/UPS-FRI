@@ -23,6 +23,8 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.similarities.BM25Similarity;
+import org.apache.lucene.search.similarities.ClassicSimilarity;
 import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -54,11 +56,11 @@ public class QuerySimple {
         Query q = new QueryParser( "text", analyzer).parse(querystr);
 
         //int hitsPerPage = 10;
-        int hitsPerPage = 5;
+        int hitsPerPage = 50;
         IndexReader reader = DirectoryReader.open(index);
         
         IndexSearcher searcher = new IndexSearcher(reader);
-        searcher.setSimilarity(new TFIDFLogBirSmooth());
+        searcher.setSimilarity(new TFIDFTotalBIrSmooth());
         //searcher.setSimilarity(choisirSimilarity());
         
         TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
