@@ -1,4 +1,5 @@
 
+
 # EMIND1G1 : Fondements de la recherche d'information
 
 ## Jesús Lovón Melgarejo
@@ -82,6 +83,127 @@ public float score(int doc, float freq) throws IOException {
 
 #### 5 Utilisez plusieurs des méthodes des points précédents avec la requête « the white house ». Identifiez les différences parmi toutes les méthodes que vous avez implémentée. Avec les premiers 5 résultats pouvez vous dire quelle méthode vous semble la plus pertinente ? Pourquoi ?.
 
+<table>
+    <tbody>
+    <tr>
+    <td align="center"><b>TF Total</b></td>
+    <td align="center"><b>TF Max</b></td>
+    <td align="center" width="50%"><b>TF Sum</b></td>
+    </tr>
+    <tr>
+    <td><ol>  
+    <li>The White House</li>
+<li>White House</li>
+<li>White House Plumbers</li>
+<li>Outsider in the White House</li>
+<li>The White House plumbers</li>
+</ol></td>
+<td><ol> 
+<li>The White House</li>
+<li>White</li>
+<li>White House</li>
+<li>House</li>
+<li>White House Plumbers</li>
+ <ol></td>
+    <td><ol>  
+<li>Wikipedia:Requests for deletion/Requests/2014/The Magical White Hare of the Gump St Just Cornwall</li>
+<li>Post-Imperial Heads of the House of Osman from the Abdülaziz Branch (1922-Present)</li>
+<li>Wikipedia:Requests for deletion/Requests/2013/Niggers in the White House</li>
+<li>Category:Former members of the British House of Commons for Northern Irish Constituencies</li>
+<li>Wikipedia:Requests for deletion/Requests/2009/Mickey's House of Villains 2</li>
+</ol></td>
+    </tr>
+    <tr>
+    <td align="center"><b>TF Log</b></td>
+    <td align="center"><b>TF Frac</b></td>
+    <td align="center" width="40%"><b>TF BM25</b></td>
+    </tr>
+    <tr>
+    <td><ol>  
+    <li>The White House</li>
+<li>White House</li>
+<li>White House Plumbers</li>
+<li>Outsider in the White House</li>
+<li>The White House plumbers</li>
+</ol></td>
+<td><ol> 
+<li>1. The White House</li>
+<li>White House</li>
+<li>White House Plumbers</li>
+<li>Outsider in the White House</li>
+<li>The White House plumbers</li>
+ <ol></td>
+    <td><ol>  
+<li>Wikipedia:Requests for deletion/Requests/2014/The Magical White Hare of the Gump St Just Cornwall</li>
+<li>Post-Imperial Heads of the House of Osman from the Abdülaziz Branch (1922-Present)</li>
+<li>Wikipedia:Requests for deletion/Requests/2013/Niggers in the White House</li>
+<li>Category:Former members of the British House of Commons for Northern Irish Constituencies</li>
+<li>Wikipedia:Requests for deletion/Requests/2009/Mickey's House of Villains 2</li>
+</ol></td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+  <td align="center" colspan="2"><b>IDF Total</b></td>
+  <td align="center"><b>IDF Sum</b></td>
+</tr>
+<tr>
+<td colspan="2">
+<ol>
+<li>Wikipedia:Requests for deletion/Requests/2014/The Magical White Hare of the Gump St Just Cornwall</li>
+<li>Post-Imperial Heads of the House of Osman from the Abdülaziz Branch (1922-Present)</li>
+<li>Category:Former members of the British House of Commons for Northern Irish Constituencies</li>
+<li>Wikipedia:Requests for deletion/Requests/2009/Mickey's House of Villains 2</li>
+<li>Speaker of the United States House of Representatives election, October 2015</li>
+</ol></td>
+<td>
+<ol>
+<li>House of della Rovere</li>
+<li>White Citizens' Council</li>
+<li>Charlotte Court House, Virginia</li>
+<li>House of Wittelsbach</li>
+<li>Category:Chicago White Sox</li>
+</ol></td>
+<td></td>
+</tr>
+  <tr>
+  <td align="center"><b>IDF Sum, Smooth</b></td>
+  <td align="center"><b>IDF BIR</b></td>
+  <td align="center"><b>IDF BIR, Smooth</b></td>
+</tr>
+<tr>
+<td>
+<ol>
+<li>The White House</li>
+<li>White House</li>
+<li>White House Plumbers</li>
+<li>Outsider in the White House</li>
+<li>The White House plumbers</li>
+</ol></td>
+<td>
+<ol>
+<li>House of della Rovere</li>
+<li>White Citizens' Council</li>
+<li>Charlotte Court House, Virginia</li>
+<li>House of Wittelsbach</li>
+<li>Category:Chicago White Sox</li>
+</ol></td>
+<td>
+<ol>
+<li>The White House</li>
+<li>White House</li>
+<li>White House Plumbers</li>
+<li>Outsider in the White House</li>
+<li>The White House plumbers</li>
+</ol></td>
+</tr>
+</tbody>
+</table>
+
+>  D'après les résultats dans les tableaux, on peut analyser que les criterias TFTotal, TF Log, TF Frac, IDF Sum Smooth et IDF BIR Smooth sont les plus pertinentes car ils considerent l’ensemble des mots de la requête “the white house”. Dans le cas de TFMax, par exemple, on trouve les mots isolés *House* ou *White* et dans les autres criterias les résultats sont biaisés par la longuer des documents.
 #### 6 Faites une combinaison en utilisant les deux/trois méthodes plus performantes que vous avez identifié dans le point 5. Les résultats obtenus sont-ils meilleurs ? Justifiez vous réponses.
 
 #### 7 Effectuez une requête par titre et puis par contenue des pages Wikipédia. Trouvez vous de différences ? Les méthodes sont-ils plus ou moins pertinents selon le champ utilisé ? Pourquoi ?

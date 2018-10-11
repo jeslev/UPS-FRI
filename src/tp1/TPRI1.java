@@ -26,8 +26,15 @@ public class TPRI1 {
     
     public static void main(String[] args) {
         TPRI1 wfr = new TPRI1();
-        wfr.index();
-        wfr.query("title:France");
+//        wfr.index();
+//        wfr.query("title:France");
+
+    
+        for(int i=0;i<=10;i++) {
+        	System.out.println("Tipo "+i);
+        	wfr.index(i);
+            wfr.query("title:the white house",i);
+        }
     }
     
     public void index() {
@@ -38,9 +45,27 @@ public class TPRI1 {
             Logger.getLogger(TPRI1.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void index(int simIndex) {
+        IndexCollection mywikipedia = new IndexCollection(nameFileXML,nameFolderIndex,simIndex);
+        try {
+            mywikipedia.index();
+        } catch (Exception ex) {
+            Logger.getLogger(TPRI1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     private void query(String query) {
         QuerySimple qs = new QuerySimple(nameFolderIndex);
+        try {
+            qs.process(query);
+        } catch (Exception ex) {
+            Logger.getLogger(TPRI1.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void query(String query, int simIndex) {
+        QuerySimple qs = new QuerySimple(nameFolderIndex, simIndex);
         try {
             qs.process(query);
         } catch (Exception ex) {

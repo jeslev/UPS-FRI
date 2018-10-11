@@ -25,6 +25,7 @@ import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.search.similarities.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -51,12 +52,22 @@ public class IndexCollection {
     String titleString;
     String indexPath;
     IndexWriter writer;
+    int indexSimilarity;
 
     public IndexCollection(String filename, String indexPath) {
         this.filename = filename;
         this.indexPath = indexPath;
+        indexSimilarity = -1;
     }
 
+    public IndexCollection(String filename, String indexPath, int i) {
+        this.filename = filename;
+        this.indexPath = indexPath;
+        this.indexSimilarity = i;
+        
+    }
+    
+     
     public void index() throws IOException {
         File f = new File(filename);
         if (!f.exists()) {
@@ -79,7 +90,8 @@ public class IndexCollection {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         
-        iwc.setSimilarity(new IDFBirSmooth());
+        iwc.setSimilarity(choisirSimilarity());
+        //iwc.setSimilarity(choisirSimilarity());
         
         boolean create = true;
         if (create) {
@@ -99,4 +111,48 @@ public class IndexCollection {
             writer.close();
         }
     }
+    
+    public Similarity choisirSimilarity() {
+    	Similarity sim = null; 
+    	switch (indexSimilarity) {
+    	case 0:
+			sim =  new TFTotal();
+			break;
+    	case 1:
+    		sim =  new TFMax();
+			break;
+		case 2:
+			sim =  new TFSum();
+			break;
+		case 3:
+			sim =  new TFLog();
+			break;
+		case 4:
+			sim =  new TFFrac(1.2f);
+			break;
+		case 5:
+			sim =  new TFBM25();
+			break;
+		case 6:
+			sim =  new IDFTotal();
+			break;
+		case 7:
+			sim =  new IDFSum();
+			break;
+		case 8:
+			sim =  new IDFSmooth();
+			break;
+		case 9:
+			sim =  new IDFBir();
+			break;
+		case 10:
+			sim =  new IDFBirSmooth();
+			break;
+		default:
+			break;
+		}
+    	
+    	return sim;
+    }
+   
 }
