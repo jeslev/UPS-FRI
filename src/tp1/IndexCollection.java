@@ -76,9 +76,18 @@ public class IndexCollection {
         }
         process();
     }
+    
+    
 
     private void indexDoc(String title) throws IOException {
         Document doc = new Document();
+        doc.add(new TextField("title", title, Field.Store.YES));
+        writer.addDocument(doc);
+    }
+    
+    private void indexDoc(String title, String text) throws IOException {
+        Document doc = new Document();
+        doc.add(new TextField("text", text, Field.Store.YES));
         doc.add(new TextField("title", title, Field.Store.YES));
         writer.addDocument(doc);
     }
@@ -90,7 +99,7 @@ public class IndexCollection {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         
-        iwc.setSimilarity(new TFIDFTotalBIrSmooth());
+        iwc.setSimilarity(new TFIDFLogBirSmooth());
         //iwc.setSimilarity(choisirSimilarity());
         
         boolean create = true;
@@ -103,7 +112,8 @@ public class IndexCollection {
         try {
             CSVParser csvFileParser = CSVFormat.DEFAULT.parse(new FileReader(new File(filename)));
             for (CSVRecord csvRecord : csvFileParser) {
-                indexDoc(csvRecord.get(2));
+                //indexDoc(csvRecord.get(2));
+                indexDoc(csvRecord.get(1), csvRecord.get(2));
             }
         } catch (IOException e) {
             Logger.getLogger(IndexCollection.class.getName()).log(Level.SEVERE, null, e);
