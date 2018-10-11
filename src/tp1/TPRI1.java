@@ -27,7 +27,8 @@ public class TPRI1 {
     public static void main(String[] args) {
         TPRI1 wfr = new TPRI1();
         wfr.index();
-        wfr.query("title:the white house");
+        //wfr.query("text:Thomas and Mario are strikers playing in Munich");
+        wfr.query("text:the white house");
 
     
 //        for(int i=0;i<=10;i++) {

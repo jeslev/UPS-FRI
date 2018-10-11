@@ -51,14 +51,14 @@ public class QuerySimple {
         Path path = new File(indexPath).toPath();
         Directory index = FSDirectory.open(path);
 
-        Query q = new QueryParser( "title", analyzer).parse(querystr);
+        Query q = new QueryParser( "text", analyzer).parse(querystr);
 
         //int hitsPerPage = 10;
         int hitsPerPage = 5;
         IndexReader reader = DirectoryReader.open(index);
         
         IndexSearcher searcher = new IndexSearcher(reader);
-        searcher.setSimilarity(new TFIDFTotalBIrSmooth());
+        searcher.setSimilarity(new TFIDFLogBirSmooth());
         //searcher.setSimilarity(choisirSimilarity());
         
         TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);

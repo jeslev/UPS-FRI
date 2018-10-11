@@ -1,4 +1,5 @@
 
+  
 
 # EMIND1G1 : Fondements de la recherche d'information
 
@@ -240,7 +241,7 @@ public float score(int doc, float freq) throws IOException {
 
 #### 7 Effectuez une requête par titre et puis par contenue des pages Wikipédia. Trouvez vous de différences ? Les méthodes sont-ils plus ou moins pertinents selon le champ utilisé ? Pourquoi ?
 
-> Il y a des différences si on change le titre par contenue En utilisant le contenue on trouve les résultats moins pertinents, même s’il y a plus des associations et mots pour trouver une liaison entre la requête et le contenue l'analyseur de Lucene utilisé(Standard Analyser) reconnaît tous les mots, le code, attributes et liens d’un document. Alors, ca donne des résultats peu pertinents. Par contre, le titre a les mots plus stylisés et l’analyseur aide plus pour la requête dans ce champ.
+> Il y a des différences si on change le titre par contenue En utilisant le contenue on trouve les résultats moins pertinents, même s’il y a plus des associations et mots pour trouver une liaison entre la requête et le contenue l'analyseur de Lucene utilisé(Standard Analyser) reconnaît tous les mots, le code, attributes et liens d’un document.  Cependant, avec TF Log et IDF BIR Smooth les résultats ne sont pas tres loin de l'affinité attendue, mais en utilisant TF Total et IDF BIR Smooth se perds tout la pertinence.  Par contre, le titre a les mots plus stylisés et l’analyseur aide plus pour la requête dans ce champ.
 
 <table>
 <tbody>
@@ -248,12 +249,23 @@ public float score(int doc, float freq) throws IOException {
 <tr>
 <td>
 <ol>
-<li>#REDIRECT [[White House]]</li>
-<li>#REDIRECT [[White House]]</li>
-<li>#redirect [[White House]]</li>
-<li>#REDIRECT [[White House Plumbers]]</li>
-<li>[[Category:United States Executive Cabinet|White House Press Secretaries]]
-</li>
+<li>The Whitehouse</li>
+<li>The whitehouse</li>
+<li>The White House</li>
+<li>The White House plumbers</li>
+<li>Category:White House Press Secretaries</li>
+</ol>
+</td>
+</tr>
+<tr><td><b>Résultats pour  TF Total / IDF BIR Smooth</b></td></tr>
+<tr>
+<td>
+<ol>
+<li>1. Survivor: All-Stars</li>
+<li>Survivor: Palau</li>
+<li>Survivor: The Amazon</li>
+<li>Template:Infobox Chinese</li>
+<li>Template:Geobox2 list long</li>
 </ol>
 </td>
 </tr>
