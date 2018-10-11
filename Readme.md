@@ -239,3 +239,23 @@ public float score(int doc, float freq) throws IOException {
 > On peut justifier ce phénomène par la longueur limitée du champ(titre de Wikipedia) considerée pour la création des indexes. La recherche est limitée par ces terms (pour cette raison on a toujours le titre “The White House” au 1er lieu car il match totalement la requête. Il faudrait utiliser un autre champ (comme ‘text’) pour voir des autres résultats.
 
 #### 7 Effectuez une requête par titre et puis par contenue des pages Wikipédia. Trouvez vous de différences ? Les méthodes sont-ils plus ou moins pertinents selon le champ utilisé ? Pourquoi ?
+
+> Il y a des différences si on change le titre par contenue En utilisant le contenue on trouve les résultats moins pertinents, même s’il y a plus des associations et mots pour trouver une liaison entre la requête et le contenue l'analyseur de Lucene utilisé(Standard Analyser) reconnaît tous les mots, le code, attributes et liens d’un document. Alors, ca donne des résultats peu pertinents. Par contre, le titre a les mots plus stylisés et l’analyseur aide plus pour la requête dans ce champ.
+
+<table>
+<tbody>
+<tr><td><b>Résultats pour  TF Log / IDF BIR Smooth</b></td></tr>
+<tr>
+<td>
+<ol>
+<li>#REDIRECT [[White House]]</li>
+<li>#REDIRECT [[White House]]</li>
+<li>#redirect [[White House]]</li>
+<li>#REDIRECT [[White House Plumbers]]</li>
+<li>[[Category:United States Executive Cabinet|White House Press Secretaries]]
+</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>

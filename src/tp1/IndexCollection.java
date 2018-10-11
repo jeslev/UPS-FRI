@@ -90,7 +90,7 @@ public class IndexCollection {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         
-        iwc.setSimilarity(new TFIDFLogBirSmooth());
+        iwc.setSimilarity(new TFIDFTotalBIrSmooth());
         //iwc.setSimilarity(choisirSimilarity());
         
         boolean create = true;
@@ -103,7 +103,7 @@ public class IndexCollection {
         try {
             CSVParser csvFileParser = CSVFormat.DEFAULT.parse(new FileReader(new File(filename)));
             for (CSVRecord csvRecord : csvFileParser) {
-                indexDoc(csvRecord.get(1));
+                indexDoc(csvRecord.get(2));
             }
         } catch (IOException e) {
             Logger.getLogger(IndexCollection.class.getName()).log(Level.SEVERE, null, e);
