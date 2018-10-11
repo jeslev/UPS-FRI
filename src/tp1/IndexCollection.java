@@ -90,7 +90,7 @@ public class IndexCollection {
         IndexWriterConfig iwc = new IndexWriterConfig(analyzer);
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         
-        iwc.setSimilarity(choisirSimilarity());
+        iwc.setSimilarity(new TFIDFLogBirSmooth());
         //iwc.setSimilarity(choisirSimilarity());
         
         boolean create = true;

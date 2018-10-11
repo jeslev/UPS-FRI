@@ -26,15 +26,15 @@ public class TPRI1 {
     
     public static void main(String[] args) {
         TPRI1 wfr = new TPRI1();
-//        wfr.index();
-//        wfr.query("title:France");
+        wfr.index();
+        wfr.query("title:the white house");
 
     
-        for(int i=0;i<=10;i++) {
-        	System.out.println("Tipo "+i);
-        	wfr.index(i);
-            wfr.query("title:the white house",i);
-        }
+//        for(int i=0;i<=10;i++) {
+//        	System.out.println("Tipo "+i);
+//        	wfr.index(i);
+//            wfr.query("title:the white house",i);
+//        }
     }
     
     public void index() {

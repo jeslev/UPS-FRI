@@ -58,8 +58,8 @@ public class QuerySimple {
         IndexReader reader = DirectoryReader.open(index);
         
         IndexSearcher searcher = new IndexSearcher(reader);
-        //searcher.setSimilarity(new IDFBirSmooth());
-        searcher.setSimilarity(choisirSimilarity());
+        searcher.setSimilarity(new TFIDFLogBirSmooth());
+        //searcher.setSimilarity(choisirSimilarity());
         
         TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
         searcher.search(q, collector);

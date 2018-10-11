@@ -206,4 +206,36 @@ public float score(int doc, float freq) throws IOException {
 >  D'après les résultats dans les tableaux, on peut analyser que les criterias TFTotal, TF Log, TF Frac, IDF Sum Smooth et IDF BIR Smooth sont les plus pertinentes car ils considerent l’ensemble des mots de la requête “the white house”. Dans le cas de TFMax, par exemple, on trouve les mots isolés *House* ou *White* et dans les autres criterias les résultats sont biaisés par la longuer des documents.
 #### 6 Faites une combinaison en utilisant les deux/trois méthodes plus performantes que vous avez identifié dans le point 5. Les résultats obtenus sont-ils meilleurs ? Justifiez vous réponses.
 
+<table>
+<tbody>
+<tr>
+  <td align="center"><b>TF Total / IDF BIR Smooth</b></td>
+  <td align="center"><b>TF Log / IDF BIR Smooth</b></td>
+</tr>
+<tr>
+  <td>
+  <ol>
+<li>The White House</li>
+<li>White House</li>
+<li>White House Plumbers</li>
+<li>Outsider in the White House</li>
+<li>The White House plumbers</li>
+</ol>
+</td>
+  <td>
+  <ol>
+<li>The White House</li>
+<li>White House</li>
+<li>White House Plumbers</li>
+<li>Outsider in the White House</li>
+<li>The White House plumbers</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+
+> Les combinaisons TF Total et TF Log sont utilisées avec IDF BIR, Smooth afin de trouver un meilleur résultat dans la recherche. Cependant, dans les tableaux on peut voir qu’il n’y a pas aucune modification entre eux ou par rapport aux résultats précédentes(point 5).
+> On peut justifier ce phénomène par la longueur limitée du champ(titre de Wikipedia) considerée pour la création des indexes. La recherche est limitée par ces terms (pour cette raison on a toujours le titre “The White House” au 1er lieu car il match totalement la requête. Il faudrait utiliser un autre champ (comme ‘text’) pour voir des autres résultats.
+
 #### 7 Effectuez une requête par titre et puis par contenue des pages Wikipédia. Trouvez vous de différences ? Les méthodes sont-ils plus ou moins pertinents selon le champ utilisé ? Pourquoi ?
