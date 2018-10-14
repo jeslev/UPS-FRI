@@ -4,8 +4,11 @@
  */
 package tp1;
 
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.lucene.search.BooleanClause;
 
 /**
  *
@@ -25,16 +28,20 @@ public class TPRI1 {
     }
     
     public static void main(String[] args) {
-        TPRI1 wfr = new TPRI1();
-        wfr.index();
-        wfr.query("text:Thomas and Mario are strikers playing in Munich");
 
-    
-//        for(int i=0;i<=10;i++) {
-//        	System.out.println("Tipo "+i);
-//        	wfr.index(i);
-//            wfr.query("title:the white house",i);
-//        }
+    	    	
+    	TPRI3 ri = new TPRI3();
+    	
+    	//Scanner sc = new Scanner(System.in);
+    	//String query = sc.nextLine();
+    	  
+    	String query = "Thomas and Mario are strikers playing in Munich";
+    	String q1 = "Munich";
+    	String q2 = "Mario";
+    	String q3 = "Thomas";
+    	//ri.index();
+    	ri.query(q1,q2,q3);
+    	
     }
     
     public void index() {
@@ -58,7 +65,7 @@ public class TPRI1 {
     private void query(String query) {
         QuerySimple qs = new QuerySimple(nameFolderIndex);
         try {
-            qs.process(query);
+           // qs.process(query);
         } catch (Exception ex) {
             Logger.getLogger(TPRI1.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -67,7 +74,7 @@ public class TPRI1 {
     private void query(String query, int simIndex) {
         QuerySimple qs = new QuerySimple(nameFolderIndex, simIndex);
         try {
-            qs.process(query);
+           // qs.process(query);
         } catch (Exception ex) {
             Logger.getLogger(TPRI1.class.getName()).log(Level.SEVERE, null, ex);
         }

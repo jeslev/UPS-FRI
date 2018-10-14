@@ -19,6 +19,8 @@ import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -48,23 +50,33 @@ public class QuerySimple {
         this.indexSimilarity = i;
     }
     
-    public void process(String querystr) throws IOException, ParseException {
+    public void process(String querystr1, String querystr2, String querystr3) throws IOException, ParseException {
         StandardAnalyzer analyzer = new StandardAnalyzer();
         Path path = new File(indexPath).toPath();
         Directory index = FSDirectory.open(path);
 
-        Query q = new QueryParser( "text", analyzer).parse(querystr);
+        Query q1 = new QueryParser( "text", analyzer).parse(querystr1);
+        Query q2 = new QueryParser( "text", analyzer).parse(querystr2);
+        Query q3 = new QueryParser( "text", analyzer).parse(querystr3);
+        
+        BooleanQuery bq = new BooleanQuery.Builder()
+        		.add(q1, BooleanClause.Occur.MUST)
+        		.add(q2, BooleanClause.Occur.MUST)
+        		.add(q3, BooleanClause.Occur.MUST)
+        		.build();
+        
+        
 
         //int hitsPerPage = 10;
         int hitsPerPage = 50;
         IndexReader reader = DirectoryReader.open(index);
         
         IndexSearcher searcher = new IndexSearcher(reader);
-        searcher.setSimilarity(new TFIDFTotalBIrSmooth());
+        //searcher.setSimilarity(new BM11Similarity(1.2f));
         //searcher.setSimilarity(choisirSimilarity());
         
         TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);
-        searcher.search(q, collector);
+        searcher.search(bq, collector);
         ScoreDoc[] hits = collector.topDocs().scoreDocs;
 
         System.out.println("Found " + hits.length + " hits of "+collector.getTotalHits()+".");
