@@ -50,7 +50,7 @@ public class QuerySimple {
         this.indexSimilarity = i;
     }
     
-    public void process(String querystr1, String querystr2, String querystr3) throws IOException, ParseException {
+    public void process(String querystr1, String querystr2, String querystr3, String query4) throws IOException, ParseException {
         StandardAnalyzer analyzer = new StandardAnalyzer();
         Path path = new File(indexPath).toPath();
         Directory index = FSDirectory.open(path);
@@ -58,14 +58,27 @@ public class QuerySimple {
         Query q1 = new QueryParser( "text", analyzer).parse(querystr1);
         Query q2 = new QueryParser( "text", analyzer).parse(querystr2);
         Query q3 = new QueryParser( "text", analyzer).parse(querystr3);
+        Query q4 = new QueryParser( "text", analyzer).parse(query4);
         
-        BooleanQuery bq = new BooleanQuery.Builder()
+        BooleanQuery bq1 = new BooleanQuery.Builder()
         		.add(q1, BooleanClause.Occur.MUST)
+        		.add(q4, BooleanClause.Occur.MUST)
+        		.build();
+        BooleanQuery bq2 = new BooleanQuery.Builder()
         		.add(q2, BooleanClause.Occur.MUST)
+        		.add(q4, BooleanClause.Occur.MUST)
+        		.build();
+        BooleanQuery bq3 = new BooleanQuery.Builder()
         		.add(q3, BooleanClause.Occur.MUST)
+        		.add(q4, BooleanClause.Occur.MUST)
         		.build();
         
         
+        BooleanQuery bq = new BooleanQuery.Builder()
+        		.add(bq1, BooleanClause.Occur.SHOULD)
+        		.add(bq2, BooleanClause.Occur.SHOULD)
+        		.add(bq3, BooleanClause.Occur.SHOULD)
+        		.build();
 
         //int hitsPerPage = 10;
         int hitsPerPage = 50;

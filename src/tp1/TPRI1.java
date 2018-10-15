@@ -40,7 +40,7 @@ public class TPRI1 {
     	String q2 = "Mario";
     	String q3 = "Thomas";
     	//ri.index();
-    	ri.query(q1,q2,q3);
+    	ri.query(q1,q2,q3,query);
     	
     }
     
