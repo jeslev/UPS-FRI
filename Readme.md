@@ -61,3 +61,17 @@
 > Le champ titre n'est pas une bonne ressource pour faire ce type de requête car il n'y a pas assez mot (terms) pour contextualiser requête plus complexes.
 
 #### Q5
+> Pour l'implémentation on a choisi la même logique pour le meilleur résultat du Q3. C'est à dire, on pris chaque terme de la requête et on fait un Boolean Query,en même temps on a pris tous ces BooleanQuery pour finalement les ajouter à un plus grande BooleanQuery qui analysera chaque terme pour donner un résultat ensemble parmi tous les terms.
+
+> Pour le tester il faut executer le Main de TPR1 et ensuite taper une requête, les 50 premiers résultats seront montrés.
+
+> En suite les résultats de quelques requêtes:
+
+##### Requête 1:
+![Requête 1](https://github.com/jeslev/UPS-FRI/tree/TP3/screenshots/requete1.png "Requête 1")
+
+##### Requête 2:
+![Requête 2](https://github.com/jeslev/UPS-FRI/tree/TP3/screenshots/requete2.png "Requête 2")
+
+##### Requête 3:
+![Requête 3](https://github.com/jeslev/UPS-FRI/tree/TP3/screenshots/requete3.png "Requête 3")

@@ -13,6 +13,8 @@ package tp1;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
+
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
@@ -21,6 +23,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.BooleanQuery.Builder;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -50,42 +53,66 @@ public class QuerySimple {
         this.indexSimilarity = i;
     }
     
-    public void process(String querystr1, String querystr2, String querystr3, String query4) throws IOException, ParseException {
+ //   public void process(String querystr1, String querystr2, String querystr3, String query4) throws IOException, ParseException {
+  public void process(List<String> terms, String query) throws IOException, ParseException {
         StandardAnalyzer analyzer = new StandardAnalyzer();
         Path path = new File(indexPath).toPath();
         Directory index = FSDirectory.open(path);
 
-        Query q1 = new QueryParser( "text", analyzer).parse(querystr1);
-        Query q2 = new QueryParser( "text", analyzer).parse(querystr2);
-        Query q3 = new QueryParser( "text", analyzer).parse(querystr3);
-        Query q4 = new QueryParser( "text", analyzer).parse(query4);
+        Query q = new QueryParser( "text", analyzer).parse(query);
         
-        BooleanQuery bq1 = new BooleanQuery.Builder()
-        		.add(q1, BooleanClause.Occur.MUST)
-        		.add(q4, BooleanClause.Occur.MUST)
-        		.build();
-        BooleanQuery bq2 = new BooleanQuery.Builder()
-        		.add(q2, BooleanClause.Occur.MUST)
-        		.add(q4, BooleanClause.Occur.MUST)
-        		.build();
-        BooleanQuery bq3 = new BooleanQuery.Builder()
-        		.add(q3, BooleanClause.Occur.MUST)
-        		.add(q4, BooleanClause.Occur.MUST)
-        		.build();
-        
-        
-        BooleanQuery bq = new BooleanQuery.Builder()
-        		.add(bq1, BooleanClause.Occur.SHOULD)
-        		.add(bq2, BooleanClause.Occur.SHOULD)
-        		.add(bq3, BooleanClause.Occur.SHOULD)
-        		.build();
+//        Query q1 = new QueryParser( "text", analyzer).parse(querystr1);
+//        Query q2 = new QueryParser( "text", analyzer).parse(querystr2);
+//        Query q3 = new QueryParser( "text", analyzer).parse(querystr3);
+//        Query q4 = new QueryParser( "text", analyzer).parse(query4);
+//        
+//        BooleanQuery bq1 = new BooleanQuery.Builder()
+//        		.add(q1, BooleanClause.Occur.MUST)
+//        		.add(q4, BooleanClause.Occur.MUST)
+//        		.build();
+//        BooleanQuery bq2 = new BooleanQuery.Builder()
+//        		.add(q2, BooleanClause.Occur.MUST)
+//        		.add(q4, BooleanClause.Occur.MUST)
+//        		.build();
+//        BooleanQuery bq3 = new BooleanQuery.Builder()
+//        		.add(q3, BooleanClause.Occur.MUST)
+//        		.add(q4, BooleanClause.Occur.MUST)
+//        		.build();
+//        
+//        
+//        BooleanQuery bq = new BooleanQuery.Builder()
+//        		.add(bq1, BooleanClause.Occur.SHOULD)
+//        		.add(bq2, BooleanClause.Occur.SHOULD)
+//        		.add(bq3, BooleanClause.Occur.SHOULD)
+//        		.build();
 
+        
+        
+        BooleanQuery[] bqs = new BooleanQuery[terms.size()];
+        for(int i=0;i<terms.size();i++) {
+        	Query qi = new QueryParser( "text", analyzer).parse(terms.get(i));
+        	
+        	bqs[i] = new BooleanQuery.Builder()
+        			.add(qi, BooleanClause.Occur.MUST)
+        			.add(q, BooleanClause.Occur.MUST)
+        			.build();
+        }
+        
+        
+        Builder bd;
+        BooleanQuery bq;
+        bd = new BooleanQuery.Builder();
+        for(int i=0; i<terms.size(); i++) {
+        	bd.add(bqs[i], BooleanClause.Occur.SHOULD);
+        }
+        bq = bd.build();
+        
         //int hitsPerPage = 10;
         int hitsPerPage = 50;
         IndexReader reader = DirectoryReader.open(index);
         
         IndexSearcher searcher = new IndexSearcher(reader);
-        //searcher.setSimilarity(new BM11Similarity(1.2f));
+        //searcher.setSimilarity(new BM15Similarity(1.2f));
         //searcher.setSimilarity(choisirSimilarity());
         
         TopScoreDocCollector collector = TopScoreDocCollector.create(hitsPerPage);

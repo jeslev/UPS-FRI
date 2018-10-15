@@ -28,7 +28,7 @@ public class TPRI3 {
     public void query(String q1, String q2, String q3, String q) {
         QuerySimple qs = new QuerySimple(nameFolderIndex);
         try {
-            qs.process(q1, q2, q3, q);
+            //qs.process(q1, q2, q3, q);
         } catch (Exception ex) {
             Logger.getLogger(TPRI1.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -49,12 +49,12 @@ public class TPRI3 {
 		
 		System.out.println();
 
-		//		QuerySimple qs = new QuerySimple(nameFolderIndex);
-//        try {
-//            qs.process(query);
-//        } catch (Exception ex) {
-//            Logger.getLogger(TPRI1.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+		QuerySimple qs = new QuerySimple(nameFolderIndex);
+        try {
+            qs.process(motImpts, query);
+        } catch (Exception ex) {
+            Logger.getLogger(TPRI1.class.getName()).log(Level.SEVERE, null, ex);
+        }
 	}
 	
 	

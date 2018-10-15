@@ -31,16 +31,18 @@ public class TPRI1 {
 
     	    	
     	TPRI3 ri = new TPRI3();
-    	
-    	//Scanner sc = new Scanner(System.in);
-    	//String query = sc.nextLine();
+
     	  
-    	String query = "Thomas and Mario are strikers playing in Munich";
-    	String q1 = "Munich";
-    	String q2 = "Mario";
-    	String q3 = "Thomas";
+//    	String query = "Thomas and Mario are strikers playing in Munich";
+//    	String q1 = "Munich";
+//    	String q2 = "Mario";
+//    	String q3 = "Thomas";
+    	
+    	//Q5
+    	Scanner sc = new Scanner(System.in);
+    	String query = sc.nextLine();
     	//ri.index();
-    	ri.query(q1,q2,q3,query);
+    	ri.query(query);
     	
     }
     
